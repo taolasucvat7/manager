@@ -7,13 +7,19 @@
         }
 
         // Set the file URL to fetch through cURL
-        curl_setopt($curl, CURLOPT_URL, "http://offer.ebay.com/ws/eBayISAPI.dll?ViewBidsLogin&item=".$_GET["id"]);
+	if(isset($_GET["act"]) && $_GET["act"] == "viewsold")
+        	curl_setopt($curl, CURLOPT_URL, "http://offer.ebay.com/ws/eBayISAPI.dll?ViewBidsLogin&item=".$_GET["id"]);
+	else if(isset($_GET["act"]) && $_GET["act"] == "viewitem")
+		curl_setopt($curl, CURLOPT_URL, "http://ebay.com/itm/".$_GET["id"]);
+	else
+		exit;
 
         // Set a different user agent string (Googlebot)
         curl_setopt($curl, CURLOPT_USERAGENT, 'Googlebot/2.1 (+http://www.google.com/bot.html)'); 
 
         // Follow redirects, if any
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true); 
+	
 
         // Fail the cURL request if response code = 400 (like 404 errors) 
         curl_setopt($curl, CURLOPT_FAILONERROR, true); 
@@ -28,7 +34,6 @@
         curl_setopt($curl, CURLOPT_TIMEOUT, 50);
 
         // Do not check the SSL certificates
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); 
 
         // Fetch the URL and save the content in $html variable
