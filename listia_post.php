@@ -40,11 +40,9 @@ curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:
 //$ckfile = tempnam ("http://5c909bdf.ngrok.io/cookie/cuong077.txt", 'cookiename');
 //curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
 //curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
-$ckfile = tempnam ("/tmp", "cookie");
 $cookie = getCookie("http://54fd51c8.ngrok.io/cookie/".$_SERVER['SERVER_NAME'].".txt");
 $headers[] = "Cookie: ".$cookie;
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
 
 switch ($_GET["action"]) {
 	case 'geo':
@@ -646,7 +644,7 @@ function getInfo($ch){
 	    $result["error"] = true;
 
 	}
-	print_r($GLOBALS["ckfile"]);
+
 	return $result;
 }
 
