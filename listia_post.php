@@ -40,9 +40,11 @@ curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:
 //$ckfile = tempnam ("http://5c909bdf.ngrok.io/cookie/cuong077.txt", 'cookiename');
 //curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
 //curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
+$ckfile = tempnam ("/tmp", "cookie");
 $cookie = getCookie("http://54fd51c8.ngrok.io/cookie/".$_SERVER['SERVER_NAME'].".txt");
 $headers[] = "Cookie: ".$cookie;
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
 
 switch ($_GET["action"]) {
 	case 'geo':
@@ -455,10 +457,10 @@ function sendMessageContact($ch, $data, $action_link){
 	curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0');
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); 
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $postinfo);
-	curl_setopt($ch, CURLOPT_HTTPHEADER , array(
-	    "X-CSRF-Token: ".$data["authenticity_token"],
-		"X-Requested-With: XMLHttpRequest"
-	));
+
+	$GLOBALS['headers'][] = "X-CSRF-Token: ".$data["authenticity_token"];
+	$GLOBALS['headers'][] = "X-Requested-With: XMLHttpRequest";
+	curl_setopt($ch, CURLOPT_HTTPHEADER , $GLOBALS['headers']);
 	$html = curl_exec($ch);
 }
 
@@ -644,10 +646,8 @@ function getInfo($ch){
 	    $result["error"] = true;
 
 	}
-
 	return $result;
 }
-
 
 
 function jsonNotify($notify_raw){
@@ -859,6 +859,7 @@ function doListItem($ch, $data){
 	  CURLINFO_HEADER_OUT => true,
 	  CURLOPT_POST => 1,
 	  CURLOPT_POSTFIELDS => $post_data,
+	  CURLOPT_HTTPHEADER => $GLOBALS['headers']
 	));
 
 	$response = curl_exec($ch);
