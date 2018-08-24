@@ -48,7 +48,7 @@ curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
 
 switch ($_GET["action"]) {
 	case 'geo':
-		file_put_contents("log.txt", "asd");
+		
 		break;
 
 	case 'detect_category':
@@ -773,10 +773,11 @@ function getIDImageBeforeList($ch, $token, $images){
 
 	$post_data = build_data_files($boundary, $fields, $files);
 
-	$GLOBALS['headers'][] = "X-CSRF-Token: ".$TOKEN;
-	$GLOBALS['headers'][] = "X-Requested-With: XMLHttpRequest";
-	$GLOBALS['headers'][] = "Content-Type: multipart/form-data; boundary=" . $delimiter;
-	$GLOBALS['headers'][] = "Content-Length: " . strlen($post_data);
+	$headers[] = "X-CSRF-Token: ".$TOKEN;
+	$headers[] = "X-Requested-With: XMLHttpRequest";
+	$headers[] = "Content-Type: multipart/form-data; boundary=" . $delimiter;
+	$headers[] = "Content-Length: " . strlen($post_data);
+	$headers[] = $GLOBALS['headers'][0];
 	curl_setopt_array($ch, array(
 	  CURLOPT_URL => $url,
 	  CURLOPT_RETURNTRANSFER => 1,
@@ -785,7 +786,7 @@ function getIDImageBeforeList($ch, $token, $images){
 	  CURLOPT_CUSTOMREQUEST => "POST",
 	  CURLOPT_POST => 1,
 	  CURLOPT_POSTFIELDS => $post_data,
-	  CURLOPT_HTTPHEADER => $GLOBALS['headers']
+	  CURLOPT_HTTPHEADER => $headers
 	));
 
 	$response = curl_exec($ch);
@@ -813,6 +814,7 @@ function doListItem($ch, $data){
 		if($key == 8)
 			break;
 	}
+	
 
 	$post_data .= "&auction_form[auction_params][description]=".$data["description"].
 	"&listing_toggle=auction".
@@ -839,17 +841,16 @@ function doListItem($ch, $data){
 	"&auction_form[auction_params][country]=".$data["location_short"].
 	"&auction_form[latitude]=".$data["latitude"].
 	"&auction_form[longitude]=".$data["longitude"].
-	"&listing_type=list"
-	;
+	"&listing_type=list";
 
 	$post_data .= "&auction_form[auction_params][confirmed_costs]=&show_verification_popup_on_redirect=&adv_options_open=";
 
 
 	$url = "https://www.listia.com/list";
 
-
-	$GLOBALS['headers'][] = "X-CSRF-Token: ".$TOKEN;
-	$GLOBALS['headers'][] = "X-Requested-With: XMLHttpRequest";
+	$headers[] = "X-CSRF-Token: ".$TOKEN;
+	$headers[] = "X-Requested-With: XMLHttpRequest";
+	$headers[] = $GLOBALS['headers'][0];
 	curl_setopt_array($ch, array(
 	  CURLOPT_URL => $url,
 	  CURLOPT_RETURNTRANSFER => 1,
@@ -859,7 +860,7 @@ function doListItem($ch, $data){
 	  CURLINFO_HEADER_OUT => true,
 	  CURLOPT_POST => 1,
 	  CURLOPT_POSTFIELDS => $post_data,
-	  CURLOPT_HTTPHEADER => $GLOBALS['headers']
+	  CURLOPT_HTTPHEADER => $headers
 	));
 
 	$response = curl_exec($ch);
