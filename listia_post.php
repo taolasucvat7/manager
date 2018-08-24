@@ -41,7 +41,7 @@ curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:
 //curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
 //curl_setopt($ch, CURLOPT_COOKIEFILE, $ckfile);
 $ckfile = tempnam ("/tmp", "cookie");
-$cookie = getCookie("http://7d531971.ngrok.io/cookie/".$_SERVER['SERVER_NAME'].".txt");
+$cookie = getCookie("http://gsiot-t320-rvdr.try.yaler.io/cookie/".$_SERVER['SERVER_NAME'].".txt");
 $headers[] = "Cookie: ".$cookie;
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_COOKIEJAR, $ckfile);
